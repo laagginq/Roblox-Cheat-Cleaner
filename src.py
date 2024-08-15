@@ -2,7 +2,6 @@ import shutil
 import os
 import inquirer
 import colorama
-import win32com.client
 from colorama import Fore, Back, Style
 
 colorama.init(autoreset=True)
@@ -21,20 +20,6 @@ def detect_drives():
             paths_to_search.append(drive)
     
     return paths_to_search
-
-def uninstall_program(program_name):
-    strComputer = "."
-    objWMIService = win32com.client.Dispatch("WbemScripting.SWbemLocator")
-    objSWbemServices = objWMIService.ConnectServer(strComputer, "root\\cimv2")
-    query = f"SELECT * FROM Win32_Product WHERE Name = '{program_name}'"
-    colItems = objSWbemServices.ExecQuery(query)
-    for objItem in colItems:
-        print(f"Uninstalling {objItem.Name}...")
-        result = objItem.Uninstall()
-        if result == 0:
-            print(f"{objItem.Name} has been uninstalled successfully.")
-        else:
-            print(f"Failed to uninstall {objItem.Name}. Error code: {result}")
 
 def gprint(t):
     print(Fore.GREEN+t)
